@@ -10,7 +10,8 @@ from circus.py3compat import StringIO
 from circus.client import make_message
 from circus.tests.support import TestCircus, async_poll_for, truncate_file
 from circus.tests.support import TestCase, EasyTestSuite
-from circus.stream import FileStream, WatchedFileStream, TimedRotatingFileStream
+from circus.stream import FileStream, WatchedFileStream
+from circus.stream import TimedRotatingFileStream
 from circus.stream import FancyStdoutStream
 
 

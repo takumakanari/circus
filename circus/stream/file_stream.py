@@ -2,7 +2,7 @@ import errno
 import os
 import tempfile
 from datetime import datetime
-import time
+import time as time_
 import re
 from stat import ST_DEV, ST_INO, ST_MTIME
 from circus import logger
@@ -268,7 +268,7 @@ for weekly rollover: %s" % self._when)
         if os.path.exists(self._filename):
             t = os.stat(self._filename)[ST_MTIME]
         else:
-            t = int(time.time())
+            t = int(time_.time())
         self._rollover_at = self._compute_rollover(t)
 
     def _do_rollover(self):
@@ -276,22 +276,22 @@ for weekly rollover: %s" % self._when)
             self._file.close()
             self._file = None
 
-        current_time = int(time.time())
-        dst_now = time.localtime(current_time)[-1]
+        current_time = int(time_.time())
+        dst_now = time_.localtime(current_time)[-1]
         t = self._rollover_at - self._interval
         if self._utc:
-            time_touple = time.gmtime(t)
+            time_touple = time_.gmtime(t)
         else:
-            time_touple = time.localtime(t)
+            time_touple = time_.localtime(t)
             dst_then = time_touple[-1]
             if dst_now != dst_then:
                 if dst_now:
                     addend = 3600
                 else:
                     addend = -3600
-                time_touple = time.localtime(t + addend)
+                time_touple = time_.localtime(t + addend)
 
-        dfn = self._filename + "." + time.strftime(self._suffix, time_touple)
+        dfn = self._filename + "." + time_.strftime(self._suffix, time_touple)
 
         if os.path.exists(dfn):
             os.remove(dfn)
@@ -316,9 +316,9 @@ for weekly rollover: %s" % self._when)
 
         if self._when == "MIDNIGHT" or self._when.startswith("W"):
             if self._utc:
-                t = time.gmtime(current_time)
+                t = time_.gmtime(current_time)
             else:
-                t = time.localtime(current_time)
+                t = time_.localtime(current_time)
             current_hour = t[3]
             current_minute = t[4]
             current_second = t[5]
@@ -336,7 +336,7 @@ for weekly rollover: %s" % self._when)
                 new_rollover_at = result + (days_to_wait * (60 * 60 * 24))
                 if not self._utc:
                     dst_now = t[-1]
-                    dst_at_rollover = time.localtime(new_rollover_at)[-1]
+                    dst_at_rollover = time_.localtime(new_rollover_at)[-1]
                     if dst_now != dst_at_rollover:
                         if not dst_now:
                             addend = -3600
@@ -370,7 +370,7 @@ for weekly rollover: %s" % self._when)
         record is not used, as we are just comparing times, but it is needed so
         the method signatures are the same
         """
-        t = int(time.time())
+        t = int(time_.time())
         if t >= self._rollover_at:
             return 1
         return 0
